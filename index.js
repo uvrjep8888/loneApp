@@ -7,7 +7,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/ping', (req, res) => {
-  res.json({ message: 'pong 🏓' });
+  res.json({ message: 'pong-pong 🏓' });
 });
 
 app.listen(PORT, () => {
