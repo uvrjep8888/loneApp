@@ -16,8 +16,9 @@ jobs:
       - name: SSH and deploy
         uses: appleboy/ssh-action@v0.1.4
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.PASSWORD }}
           script: |
             echo "[🔥] Pulling latest code..."
             cd /var/lib/docker-desktop/loneDocker
