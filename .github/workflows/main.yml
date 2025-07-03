@@ -18,7 +18,7 @@ jobs:
         with:
           host: "localhost"
           username: "uverojeffrey"
-          password: "Passw000rd1!"
+          password: ""
           port: 22
           script: |
             echo "[🔥] Pulling latest code..."
