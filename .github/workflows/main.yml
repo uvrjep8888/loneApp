@@ -1,4 +1,4 @@
-name: Deploy to Server
+name: Deploy with Password
 
 on:
   push:
@@ -10,24 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
 
-      - name: SSH and deploy
-        uses: appleboy/ssh-action@v0.1.4
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: 22
-          script: |
-            echo "[🔥] Pulling latest code..."
-            cd /var/lib/docker-desktop/loneDocker
-            git pull origin main
-
-            echo "[🐳] Rebuilding Docker containers..."
-            docker-compose down
-            docker-compose build --no-cache
-            docker-compose up -d
-
-            echo "[✅] Deployment complete!"
+      - name: Run SSH command using password
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+        run: |
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no \
+          $SSH_USER@$SSH_HOST "echo '🚀 Deploy complete!'"
