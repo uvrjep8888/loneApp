@@ -10,6 +10,10 @@ app.get('/ping', (req, res) => {
   res.json({ message: 'pong-pong 🏓' });
 });
 
+app.get('/lion', (req, res) => {
+  res.json({ message: '🦁 rooooowwwwrrrrr 🦁!!!!' });
+});
+
 app.listen(PORT, () => {
   console.log(`API running on http://localhost:${PORT}`);
 });
