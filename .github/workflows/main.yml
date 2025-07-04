@@ -26,12 +26,4 @@ jobs:
           SSH_USER: ${{ secrets.USER }}
           SSH_PASSWORD: ${{ secrets.PASSWORD }}
           SSH_HOST: ${{ secrets.HOST }}
-        run: |
-          echo "[🚀] Deploying to $SSH_HOST as $SSH_USER..."
-          sshpass -p "$secrets_PASSWORD" ssh -o StrictHostKeyChecking=no "$secrets_USER@$secrets__HOST" "
-            cd /var/lib/docker-desktop/loneDocker &&
-            git pull origin main &&
-            docker compose down &&
-            docker compose build --no-cache &&
-            docker compose up -d
-          "
+       
