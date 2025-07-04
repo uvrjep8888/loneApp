@@ -1,4 +1,4 @@
-name: Deploy with Password
+name: Deploy via SSH
 
 on:
   push:
@@ -10,14 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install sshpass
-        run: sudo apt-get update && sudo apt-get install -y sshpass
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-      - name: Run SSH command using password
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass
+
+      - name: Test SSH Connection (with logs)
+        run: |
+          echo "Attempting SSH connection to $SSH_USER@$SSH_HOST"
+          sshpass -p "$SSH_PASSWORD" ssh -vvv -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "echo ✅ SSH connection successful!"
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
-        run: |
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no \
-          $SSH_USER@$SSH_HOST "echo '🚀 Deploy complete!'"
+          SSH_HOST: ${{ secrets.SSH_HOST }}
