@@ -24,3 +24,13 @@ jobs:
           SSH_USER: ${{ secrets.USER }}
           SSH_PASSWORD: ${{ secrets.PASSWORD }}
           SSH_HOST: ${{ secrets.HOST }}
+      - name: Deploy to Server
+        run: |
+          ssh $SSH_USER@$SSH_HOST << 'EOF'
+            cd /your/project/path
+            git pull origin main
+            docker stop my_container || true
+            docker rm my_container || true
+            docker build -t loneDocker .
+            docker run -d --name my_container -p 80:3000 my_app_image
+          EOF
