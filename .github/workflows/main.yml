@@ -1,39 +1,26 @@
 name: Deploy via SSH
 
 on:
-  push:
-    branches:
-      - main
+push:
+branches:
+- main
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+deploy:
+runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+steps:
+- name: Checkout repo
+uses: actions/checkout@v3
 
-      - name: Install sshpass
-        run: sudo apt-get install -y sshpass
+- name: Install sshpass
+run: sudo apt-get install -y sshpass
 
-      - name: Deploy to Server via SSH
-        run: |
-          echo "⚡ Connecting to $SSH_USER@$SSH_HOST to deploy..."
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "
-            echo '🛑 Stopping old container...';
-            docker stop lonedocker >/dev/null 2>&1 || true
-            docker rm lonedocker >/dev/null 2>&1 || true
-
-            echo '🐳 Building Docker image...';
-            cd ~/your-project-folder || exit 1
-            git pull origin main || exit 1
-            docker build -t lonedocker . || exit 1;
-
-            echo '🚀 Running new Docker container...';
-            docker run -d -p 80:80 --name lonedocker lonedocker;
-            echo '✅ Deployment complete!'
-          "
-        env:
-          SSH_USER: ${{ secrets.USER }}
-          SSH_PASSWORD: ${{ secrets.PASSWORD }}
-          SSH_HOST: ${{ secrets.HOST }}
+- name: Test SSH Connection (with logs)
+run: |
+echo "Attempting SSH connection to $SSH_USER@$SSH_HOST"
+sshpass -p "$SSH_PASSWORD" ssh -vvv -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "echo ✅ SSH connection successful!"
+env:
+SSH_USER: ${{ secrets.USER }}
+SSH_PASSWORD: ${{ secrets.PASSWORD }}
+SSH_HOST: ${{ secrets.HOST }}
