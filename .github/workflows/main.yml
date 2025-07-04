@@ -21,8 +21,8 @@ jobs:
           echo "⚡ Connecting to $SSH_USER@$SSH_HOST to deploy..."
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "
             echo '🛑 Stopping old container...';
-            docker stop lonedocker || true;
-            docker rm lonedocker || true;
+            docker stop lonedocker >/dev/null 2>&1 || true
+            docker rm lonedocker >/dev/null 2>&1 || true
 
             echo '🐳 Building Docker image...';
             cd ~/your-project-folder || exit 1
