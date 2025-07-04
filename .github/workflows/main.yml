@@ -21,6 +21,6 @@ jobs:
           echo "Attempting SSH connection to $SSH_USER@$SSH_HOST"
           sshpass -p "$SSH_PASSWORD" ssh -vvv -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "echo ✅ SSH connection successful!"
         env:
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.USER }}
+          SSH_PASSWORD: ${{ secrets.PASSWORD }}
+          SSH_HOST: ${{ secrets.HOST }}
