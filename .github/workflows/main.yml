@@ -16,9 +16,9 @@ jobs:
       - name: SSH and deploy
         uses: appleboy/ssh-action@v0.1.4
         with:
-          host: "localhost"
-          username: "uverojeffrey"
-          password: ""
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}
           port: 22
           script: |
             echo "[🔥] Pulling latest code..."
