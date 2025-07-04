@@ -1,4 +1,5 @@
-name: Deploy App
+
+name: Deploy via SSH
 
 on:
   push:
@@ -10,20 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Install sshpass
+        run: sudo apt-get install -y sshpass
+
+      - name: Test SSH Connection (with logs)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y sshpass
-      - name: Debug Secrets (Temporary!)
-        run: |
-          echo "USER: ${{ secrets.USER }}"
-          echo "HOST: ${{ secrets.HOST }}"
-      - name: Deploy to Server
+          echo "Attempting SSH connection to $SSH_USER@$SSH_HOST"
+          sshpass -p "$SSH_PASSWORD" ssh -vvv -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "echo ✅ SSH connection successful!"
         env:
           SSH_USER: ${{ secrets.USER }}
           SSH_PASSWORD: ${{ secrets.PASSWORD }}
           SSH_HOST: ${{ secrets.HOST }}
-       
