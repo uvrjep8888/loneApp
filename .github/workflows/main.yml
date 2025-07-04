@@ -1,4 +1,4 @@
-name: Deploy via SSH
+name: Deploy to Server
 
 on:
   push:
@@ -10,43 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install sshpass
-        run: sudo apt-get install -y sshpass
-
-      - name: Test SSH Connection (with logs)
-        run: |
-          echo "Attempting SSH connection to $SSH_USER@$SSH_HOST"
-          sshpass -p "$SSH_PASSWORD" ssh -vvv -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "echo ✅ SSH connection successful!"
+      - name: SSH and deploy
         env:
-          SSH_USER: ${{ secrets.USER }}
-          SSH_PASSWORD: ${{ secrets.PASSWORD }}
-          SSH_HOST: ${{ secrets.HOST }}
-      - name: Deploy to Server
+          SSH_USER: ${{ secrets.SERVER_USER }}
+          SSH_HOST: ${{ secrets.SERVER_HOST }}
+          SSH_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
         run: |
-          run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            set -e
-            echo "✅ Connected to server"
-
-            cd /home/ubuntu/myapp || exit 1
-
-            echo "🔄 Pulling latest code..."
-            git fetch origin main
-            git reset --hard origin/main
-
-            echo "🧼 Removing old container and image..."
-            docker rm -f my_container || true
-            docker rmi -f my_app_image || true
-
-            echo "🔥 Building fresh image without cache..."
-            docker build --no-cache -t my_app_image .
-
-            echo "🚀 Running new container..."
-            docker run -d --name my_container -p 80:3000 my_app_image
-
-            echo "🎉 Done: Deployed latest build!"
-          EOF
-
+          apt-get update
+          apt-get install -y sshpass
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
+            cd /your/project/path &&
+            git pull origin main &&
+            docker compose down &&
+            docker compose up -d --build
+          "
