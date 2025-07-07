@@ -23,4 +23,21 @@ jobs:
          SSH_USER: ${{ secrets.USER }}
          SSH_PASSWORD: ${{ secrets.PASSWORD }}
          SSH_HOST: ${{ secrets.HOST }}
+      - name: Rebuild and Restart Docker Container
+        run: |
+          echo "Attempting SSH connection to $SSH_USER@$SSH_HOST"
+          sshpass -p "$SSH_PASSWORD" ssh -vvv -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "
+            cd /path/to/your/project &&
+            echo '🛠️ Building Docker image...' &&
+            docker build -t loneApp . &&
+            echo '🛑 Stopping old container (if any)...' &&
+            docker stop loneApp || true &&
+            docker rm loneApp || true &&
+            echo '🚀 Running Docker container on port 80...' &&
+            docker run -d --name loneApp -p 80:80 loneApp
+          "
+        env: 
+          SSH_USER: ${{ secrets.USER }}
+          SSH_PASSWORD: ${{ secrets.PASSWORD }}
+          SSH_HOST: ${{ secrets.HOST }}
 
