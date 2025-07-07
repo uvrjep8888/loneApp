@@ -23,7 +23,7 @@ jobs:
             # Clone the repo if it doesn't exist
             if [ ! -d "loneApp" ]; then
               echo "📦 Cloning repo..."
-              git clone https://github.com/YOUR_USERNAME/loneApp.git
+              git clone https://github.com/uvrjep8888/loneApp.git
             else
               echo "🔁 Repo exists. Pulling latest changes..."
               cd loneApp && git pull origin main
