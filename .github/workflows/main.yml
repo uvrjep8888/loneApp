@@ -41,7 +41,7 @@ jobs:
             docker rm $(docker ps -a -q --filter ancestor=lonedocker) || true
 
             echo "🚀 Running new container..."
-            docker run -p 80:3000 loneapp
+            docker run -p -d 80:3000 loneapp
 
             echo "✅ Deployment complete!"
           EOF
@@ -50,5 +50,3 @@ jobs:
           SSH_PASSWORD: ${{ secrets.PASSWORD }}
           SSH_HOST: ${{ secrets.HOST }}
 
-      - name: ✅ Mark deployment complete
-        run: echo "🎉 Deployment was successful!"
