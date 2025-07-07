@@ -21,7 +21,7 @@ jobs:
             cd ~
             
             # Clone the repo if it doesn't exist
-            if [ ! -d "loneapp" ]; then
+            if [ ! -d "loneApp" ]; then
               echo "📦 Cloning repo..."
               git clone https://github.com/uvrjep8888/loneApp.git
             else
@@ -29,7 +29,9 @@ jobs:
               cd loneApp && git pull origin main
             fi
 
+            echo "🚀 Opening loneDocker  ..."
             cd ~/myproject/docker/loneDocker
+            echo "🚀 Opening loneDocker successfully Done  ..."
 
             echo "🛠️ Building Docker image..."
             docker build -t loneapp .
