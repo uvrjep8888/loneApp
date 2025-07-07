@@ -32,14 +32,14 @@ jobs:
             cd ~/loneApp
 
             echo "🛠️ Building Docker image..."
-            docker build -t loneApp .
+            docker build -t loneapp .
 
             echo "🛑 Stopping old container (if running)..."
             docker stop loneApp || true
             docker rm loneApp || true
 
             echo "🚀 Running new container..."
-            docker run -d --name loneApp -p 80:80 loneApp
+            docker run -d --name loneapp -p 80:80 loneApp
 
             echo "✅ Deployment complete!"
           EOF
