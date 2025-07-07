@@ -34,14 +34,14 @@ jobs:
             echo "🚀 Opening loneDocker successfully Done  ..."
 
             echo "🛠️ Building Docker image..."
-            docker build -t loneapp .
+            docker build -t lonedocker .
 
             echo "🛑 Stopping old container (if running)..."
-            docker stop loneApp || true
-            docker rm loneApp || true
+            docker stop lonedocker || true
+            docker rm lonedocker || true
 
             echo "🚀 Running new container..."
-            docker run -d --name loneapp -p 80:80 loneApp
+            docker run -d --name lonedocker -p 80:80 loneApp
 
             echo "✅ Deployment complete!"
           EOF
