@@ -41,7 +41,7 @@ jobs:
             docker rm $(docker ps -a -q --filter ancestor=lonedocker) || true
 
             echo "🚀 Running new container..."
-            docker run -d --name lonedocker -p 80:80 loneApp
+            docker run -p 80:80 loneapp
 
             echo "✅ Deployment complete!"
           EOF
