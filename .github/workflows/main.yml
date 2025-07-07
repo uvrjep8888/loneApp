@@ -1,43 +1,49 @@
-name: Deploy via SSH
+name: Deploy to Remote Server
 
 on:
- push:
-  branches:
-  - main
+  push:
+    branches:
+      - main  # Change to your target branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-      - name: Install sshpass
-        run: sudo apt-get install -y sshpass
-
-      - name: Test SSH Connection (with logs)
+      - name: Deploy via SSH and Docker
         run: |
-         echo "Attempting SSH connection to $SSH_USER@$SSH_HOST"
-         sshpass -p "$SSH_PASSWORD" ssh -vvv -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "echo ✅ SSH connection successful!"
-        env: 
-         SSH_USER: ${{ secrets.USER }}
-         SSH_PASSWORD: ${{ secrets.PASSWORD }}
-         SSH_HOST: ${{ secrets.HOST }}
-      - name: Rebuild and Restart Docker Container
-        run: |
-          echo "Attempting SSH connection to $SSH_USER@$SSH_HOST"
+          echo "🚀 Connecting to $SSH_USER@$SSH_HOST ..."
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" << 'EOF'
-            cd /path/to/your/project || exit 1
-            echo '🛠️ Building Docker image...'
+            set -e  # Exit immediately if any command fails
+            cd ~
+            
+            # Clone the repo if it doesn't exist
+            if [ ! -d "loneApp" ]; then
+              echo "📦 Cloning repo..."
+              git clone https://github.com/YOUR_USERNAME/loneApp.git
+            else
+              echo "🔁 Repo exists. Pulling latest changes..."
+              cd loneApp && git pull origin main
+            fi
+
+            cd ~/loneApp
+
+            echo "🛠️ Building Docker image..."
             docker build -t loneApp .
-            echo '🛑 Stopping old container (if any)...'
+
+            echo "🛑 Stopping old container (if running)..."
             docker stop loneApp || true
             docker rm loneApp || true
-            echo '🚀 Running Docker container on port 80...'
+
+            echo "🚀 Running new container..."
             docker run -d --name loneApp -p 80:80 loneApp
+
+            echo "✅ Deployment complete!"
           EOF
-        env: 
+        env:
           SSH_USER: ${{ secrets.USER }}
           SSH_PASSWORD: ${{ secrets.PASSWORD }}
           SSH_HOST: ${{ secrets.HOST }}
-
