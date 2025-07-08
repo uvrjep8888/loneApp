@@ -21,12 +21,12 @@ jobs:
             cd ~
             
             # Clone the repo if it doesn't exist
-            if [ ! -d "~/myproject/docker/loneDocker/app" ]; then
+            if [ ! -d "~/myproject/loneapp" ]; then
               echo "📦 Cloning repo..."
-              git clone https://github.com/uvrjep8888/loneApp.git ~/myproject/docker/loneDocker/app
+              git clone https://github.com/uvrjep8888/loneApp.git ~/myproject/loneapp
             else
               echo "🔁 Repo exists. Pulling latest changes..."
-              cd ~/myproject/docker/loneDocker/app && git pull origin main
+              cd ~/myproject/loneapp && git pull origin main
             fi
 
             echo "🚀 Opening loneDocker  ..."
@@ -34,7 +34,8 @@ jobs:
             echo "🚀 Opening loneDocker successfully Done  ..."
 
             echo "🛠️ Building Docker image..."
-            docker build -t lonedocker .
+            cd /myproject
+            docker build -t loneapp .
 
             echo "🛑 Stopping old container (if running)..."
             docker stop $(docker ps -a -q --filter ancestor=lonedocker) || true
