@@ -21,12 +21,12 @@ jobs:
             cd ~
             
             # Clone the repo if it doesn't exist
-            if [ ! -d "/myproject/docker/loneDocker" ]; then
+            if [ ! -d "~/myproject/docker/loneDocker" ]; then
               echo "📦 Cloning repo..."
               git clone https://github.com/uvrjep8888/loneApp.git /myproject/docker/loneDocker
             else
               echo "🔁 Repo exists. Pulling latest changes..."
-              cd /myproject/docker/loneDocker && git pull origin main
+              cd ~/myproject/docker/loneDocker && git pull origin main
             fi
 
             echo "🚀 Opening loneDocker  ..."
