@@ -21,7 +21,7 @@ jobs:
             cd ~
             
             # Clone the repo if it doesn't exist
-            if [ ! -d "~/myproject/loneapp" ]; then
+            if [ ! -d ~/myproject/loneapp ]; then
               echo "📦 Cloning repo..."
               git clone https://github.com/uvrjep8888/loneApp.git ~/myproject/loneapp
             else
