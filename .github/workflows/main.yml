@@ -35,7 +35,7 @@ jobs:
 
             echo "🛠️ Building Docker image..."
             cd ~/myproject
-            docker build -f docker/Dockerfile -t loneapp loneapp
+            docker build -f docker/loneDocker/Dockerfile -t loneapp loneapp
 
             echo "🛑 Stopping old container (if running)..."
             docker stop $(docker ps -a -q --filter ancestor=lonedocker) || true
