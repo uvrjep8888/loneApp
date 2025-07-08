@@ -38,8 +38,8 @@ jobs:
             docker build -f docker/loneDocker/dockerfile -t loneapp loneapp
 
             echo "🛑 Stopping old container (if running)..."
-            docker stop $(docker ps -a -q --filter ancestor=lonedocker) || true
-            docker rm $(docker ps -a -q --filter ancestor=lonedocker) || true
+            docker stop $(docker ps -a -q --filter ancestor=loneapp) || true
+            docker rm $(docker ps -a -q --filter ancestor=loneapp) || true
 
             
             echo "🚀 Running new container..."
