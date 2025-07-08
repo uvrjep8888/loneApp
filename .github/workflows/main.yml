@@ -34,7 +34,7 @@ jobs:
             echo "🚀 Opening loneDocker successfully Done  ..."
 
             echo "🛠️ Building Docker image..."
-            cd /myproject
+            cd ~/myproject
             docker build -t loneapp .
 
             echo "🛑 Stopping old container (if running)..."
