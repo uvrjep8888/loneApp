@@ -19,6 +19,10 @@ app.get('/wolf', (req, res) => {
   res.json({ message: '🐺 Auuuuuu! 🐺!!!!' });
 });
 
+app.get('/wolves', (req, res) => {
+  res.json({ message: '🐺 Auuuuuu! 🐺!!!!' });
+});
+
 app.listen(PORT, () => {
   console.log(`API running on http://localhost:${PORT}`);
 });
