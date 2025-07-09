@@ -1,0 +1,53 @@
+name: Deploy to Remote Server
+
+on:
+  push:
+    branches:
+      - main  # Change to your target branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH and Docker
+        run: |
+          echo "🚀 Connecting to $SSH_USER@$SSH_HOST ..."
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" << 'EOF'
+            set -e  # Exit immediately if any command fails
+            cd ~
+            
+            # Clone the repo if it doesn't exist
+            if [ ! -d ~/myproject/loneapp ]; then
+              echo "📦 Cloning repo..."
+              git clone https://github.com/uvrjep8888/loneApp.git ~/myproject/loneapp
+            else
+              echo "🔁 Repo exists. Pulling latest changes..."
+              cd ~/myproject/loneapp && git pull origin main
+            fi
+
+            echo "🚀 Opening loneDocker  ..."
+            cd ~/myproject/docker/loneDocker
+            echo "🚀 Opening loneDocker successfully Done  ..."
+
+            echo "🛠️ Building Docker image..."
+            cd ~/myproject
+            docker build -f docker/loneDocker/dockerfile -t loneapp loneapp
+
+            echo "🛑 Stopping old container (if running)..."
+            docker stop $(docker ps -a -q --filter "name=loneWolves") || true
+            docker rm $(docker ps -a -q --filter "name=loneWolves") || true
+
+            
+            echo "🚀 Running new container..."
+            docker run  -d --name loneWolves -p 80:3000 loneapp
+
+            echo "✅ Deployment complete!"
+          EOF
+        env:
+          SSH_USER: ${{ secrets.USER }}
+          SSH_PASSWORD: ${{ secrets.PASSWORD }}
+          SSH_HOST: ${{ secrets.HOST }}
