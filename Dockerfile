@@ -10,7 +10,11 @@ RUN npm cache clean --force && \
     rm -rf node_modules package-lock.json && \
     npm install
 
+RUN npm install -g @vercel/ncc
+
+
+
 COPY . .
 
 # 🏗️ Step 6: Build the app
-RUN npm run build
+RUN ncc build index.js
